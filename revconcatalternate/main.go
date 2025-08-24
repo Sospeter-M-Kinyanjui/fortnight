@@ -12,53 +12,24 @@ func main() {
 }
 
 func revConcatAlternate(slice1 []int, slice2 []int) []int {
-	if len(slice1) == 0 && len(slice2) != 0 {
-		return reverse(slice2)
-	}
-	if len(slice1) != 0 && len(slice2) == 0 {
-		return reverse(slice1)
-	}
-	if len(slice1) == 0 && len(slice2) == 0 {
-		return nil
+	len1 := len(slice1)
+	len2 := len(slice2)
+
+	maxLen := len1
+	if len2 > len1 {
+		maxLen = len2
 	}
 
-	var extra, longer, shorter, result []int
-	if len(slice1) > len(slice2) {
-		extra = slice1[len(slice2)-1:]
-		shorter = slice2
-		longer = slice1[:len(slice2)-1]
-		extra, shorter, longer = reverse(extra), reverse(shorter), reverse(longer)
-	} else if len(slice2) > len(slice1) {
-		extra = slice2[len(slice1)-1:]
-		shorter = slice1
-		longer = slice2[:len(slice1)-1]
-		extra, shorter, longer = reverse(extra), reverse(shorter), reverse(longer)
-	} else {
-		longer = slice1
-		shorter = slice2
-		longer, shorter = reverse(longer), reverse(shorter)
-	}
+	result := make([]int, 0, len1+len2)
 
-	if len(slice1) != len(slice2) {
-		result = append(result, extra...)
-		for i := 0; i < len(longer); i++ {
-			result = append(result, longer[i])
-			result = append(result, shorter[i])
+	for i := maxLen - 1; i >= 0; i-- {
+		if i < len1 {
+			result = append(result, slice1[i])
 		}
-	} else {
-		for i := 0; i < len(longer); i++ {
-			result = append(result, longer[i])
-			result = append(result, shorter[i])
+		if i < len2 {
+			result = append(result, slice2[i])
 		}
 	}
 
-	return result
-}
-
-func reverse(slice []int) []int {
-	result := []int{}
-	for i := len(slice) - 1; i >= 0; i-- {
-		result = append(result, slice[i])
-	}
 	return result
 }
